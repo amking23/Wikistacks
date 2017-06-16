@@ -2,7 +2,7 @@ var nunjucks = require("nunjucks");
 var morgan = require('morgan');
 var bodyParser = require('body-parser');
 var express = require('express');
-var router = require('index.js');
+var router = require('./routes');
 
 var app = express();
 const logger = morgan('dev');
@@ -23,3 +23,7 @@ nunjucks.configure({
 
 app.use('/', router);
 app.use(express.static('public'));
+
+app.listen(3000, function(){
+	console.log('server listening');
+})
