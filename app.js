@@ -14,7 +14,7 @@ app.use(jsonParser);
 app.use(urlencodedParser);
 app.engine('html', nunjucks.render);
 app.set('view engine', 'html');
-nunjucks.configure({
+nunjucks.configure('views', {
 	autoescape: true,
 	express: app,
 	watch: true,
