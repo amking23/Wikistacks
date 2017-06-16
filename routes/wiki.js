@@ -9,9 +9,13 @@ router.get('/',function(req,res){
   res.redirect('/')
 })
 
+
+
 router.post('/',function(req,res){
   console.log('post!')
-  var url = req.body.title.replace(/[^a-zA-Z\d\s]/g,'').replace(/\s/g,'_')
+  var url
+      url = req.body.title.replace(/[^a-zA-Z\d\s]/g,'').replace(/\s/g,'_')
+  console.log('url after its made',url)
   var page = Page.build({
     title: req.body.title,
     content: req.body.pageContent,
@@ -21,8 +25,8 @@ router.post('/',function(req,res){
   .then(result=>console.log(result))
   .catch(err=>console.log(err))
 
-  console.log('page saved')
-  res.redirect('/wiki')
+  console.log('page saved', page.dataValues)
+  res.render('wikipage',page.dataValues)
 })
 
 router.get('/add',function(req,res){

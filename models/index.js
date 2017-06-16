@@ -3,6 +3,16 @@ var db = new Sequelize('postgres://localhost:5432/wikistack',{
 	logging: false
 });
 
+
+function generateRandomURL(){
+  var generatedURL=Math.floor(Math.random()*1000000000)
+
+
+
+
+  return generatedURL.toString()
+}
+
 var page = db.define('page', {
 	/*
 	title: Sequelize.STRING,
@@ -19,8 +29,23 @@ var page = db.define('page', {
 	{
 
 	getterMethods:{
-		route: function(){return '/wiki/' + this.url_title}
+		route: function(){return '/wiki/' + this.url_title}},
+
+		hooks: {
+
+			beforeValidate: function(page,options){
+				if (!page.title) page.title=generateRandomURL()
+			}
 	}
+	//------------
+	// {
+	// 	hooks:{
+
+	// 		beforeValidate: function(page,options){
+	// 			if (!page.title) page.title=generateRandomURL()
+	// 		}
+	// 	}
+	//-----------
 });
 
 var user = db.define('user', {
