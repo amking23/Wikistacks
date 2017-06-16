@@ -3,6 +3,7 @@ var morgan = require('morgan');
 var bodyParser = require('body-parser');
 var express = require('express');
 var router = require('./routes');
+var models = require('./models')
 
 var app = express();
 const logger = morgan('dev');
@@ -21,9 +22,17 @@ nunjucks.configure('views', {
 	noCache: true
 });
 
+models.User.sync({})
+.then(function(){
+	return models.Page.sync({})
+})
+.then(function(){
+	app.listen(3000, function(){
+		console.log('server listening');
+	})
+})
+.catch(console.error)
+
 app.use('/', router);
 app.use(express.static('public'));
 
-app.listen(3000, function(){
-	console.log('server listening');
-})
