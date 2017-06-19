@@ -5,12 +5,12 @@ var db = new Sequelize('postgres://localhost:5432/wikistack',{
 
 
 function generateRandomURL(){
-  var generatedURL=Math.floor(Math.random()*1000000000)
+	var generatedURL=Math.floor(Math.random()*1000000000)
 
 
 
 
-  return generatedURL.toString()
+	return generatedURL.toString()
 }
 
 var page = db.define('page', {
@@ -28,15 +28,15 @@ var page = db.define('page', {
 	date: {type: Sequelize.DATE, defaultValue: Sequelize.NOW}},
 	{
 
-	getterMethods:{
-		route: function(){return '/wiki/' + this.url_title}},
+		getterMethods:{
+			route: function(){return '/wiki/' + this.url_title}},
 
-		hooks: {
+			hooks: {
 
-			beforeValidate: function(page,options){
-				if (!page.title) page.title=generateRandomURL()
-			}
-	}
+				beforeValidate: function(page,options){
+					if (!page.title) page.title=generateRandomURL()
+				}
+		}
 	//------------
 	// {
 	// 	hooks:{

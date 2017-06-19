@@ -26,11 +26,23 @@ router.post('/',function(req,res){
   .catch(err=>console.log(err))
 
   console.log('page saved', page.dataValues)
-  res.render('wikipage',page.dataValues)
+  //res.render('wikipage',page.dataValues)
+  res.redirect(page.route)
 })
 
 router.get('/add',function(req,res){
 
   res.render('addpage')
+})
+
+router.get('/:urlTitle', function(req, res, next){
+  Page.findOne({
+    where: {url_title: req.params.urlTitle}
+  }).then(
+    page => res.render('wikipage', page.dataValues)
+    //next();
+  ).catch(
+    error => res.json('error')
+  )
 })
 module.exports = router;

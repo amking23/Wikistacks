@@ -5,5 +5,8 @@
   <hr>
   <ul class="list-unstyled">
     <!-- PLACEHOLDER LIST OF PAGES -->
+  	{% for page in pages %}
+    	<li><a href="{{ page.route }}">{{page.title}}</a></li>
+  	{% endfor %}
   </ul>
 {% endblock %}
