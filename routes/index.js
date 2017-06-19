@@ -1,5 +1,5 @@
 var express = require('express');
-const userRouter = require('./user.js')
+const userRouter = require('./users.js')
 const wikiRouter = require('./wiki.js')
 const router = express.Router();
 var models = require('../models')
@@ -11,7 +11,7 @@ router.get('/', function(req, resp){
 	.then(pages => resp.render('index', {pages: pages}))
 });
 
-router.use('/user',userRouter)
+router.use('/users',userRouter)
 router.use('/wiki', wikiRouter)
 
 module.exports = router;

@@ -12,22 +12,30 @@ router.get('/',function(req,res){
 
 
 router.post('/',function(req,res){
-  console.log('post!')
   var url
       url = req.body.title.replace(/[^a-zA-Z\d\s]/g,'').replace(/\s/g,'_')
-  console.log('url after its made',url)
-  var page = Page.build({
+
+  User.findOrCreate({where:{
+    name: req.body.authorName,
+    email: req.body.authorEmail
+  }})
+  .then(function(person)
+   {
+    var page = Page.build({
     title: req.body.title,
     content: req.body.pageContent,
-    url_title: url
-  })
-  page.save()
-  .then(result=>console.log(result))
-  .catch(err=>console.log(err))
+    url_title: url,
+    authorId: person[0].id
+   })
+  return page.save()
+})
+.then(page => res.redirect(page.route))
+.then(result=>console.log(result))
+.catch(err=>console.log(err))
 
-  console.log('page saved', page.dataValues)
+  // console.log('page saved', page.dataValues)
   //res.render('wikipage',page.dataValues)
-  res.redirect(page.route)
+
 })
 
 router.get('/add',function(req,res){
@@ -36,10 +44,18 @@ router.get('/add',function(req,res){
 })
 
 router.get('/:urlTitle', function(req, res, next){
+  User.hasMany(Page, {foreignKey: 'authorId'})
+  Page.belongsTo(User, {foreignKey: 'authorId'})
   Page.findOne({
-    where: {url_title: req.params.urlTitle}
-  }).then(
-    page => res.render('wikipage', page.dataValues)
+    where: {url_title: req.params.urlTitle},
+    include: [User]
+  })
+  .then(
+    page => {
+      console.log('dv',page.dataValues)
+      console.log('p',page)
+      console.log('p.ic', page.id)
+      res.render('wikipage', page.dataValues)}
     //next();
   ).catch(
     error => res.json('error')
